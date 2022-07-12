@@ -368,5 +368,7 @@ def generate_table(tf_names,target_names,tissue_name):
         data=query_df.to_dict("rows"),
     )],query_js
 
+server = app.server
+
 if __name__ == '__main__':
     app.run_server(debug=True)
