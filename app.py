@@ -4,7 +4,9 @@ import dash_cytoscape as cyto
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],title = "HuBNet")
+server = app.server
+
 df = pd.read_csv("data/network_all.csv").iloc[:,2:]
 
 # Specify the layout of the navigation bar at the top
@@ -45,23 +47,6 @@ navbar = dbc.Navbar(
                     )
                 ],
         ),
-    #children=[
-    #    dbc.NavItem(
-    #        dbc.NavLink(
-    #            "Systems Biology Group",
-    #            href="http://sb.cs.cmu.edu/",
-    #        )
-    #    ),
-    #    dbc.NavItem(
-    #        dbc.NavLink(
-    #            "HuBMAP Project",
-    #            href="https://portal.hubmapconsortium.org/",
-    #        )
-    #    ),
-    #],
-    #
-    #brand="HuBNet",
-    #brand_href="#",
     color="dark",
     dark=True,
     fixed="top"
@@ -414,8 +399,6 @@ def generate_table(tf_names,target_names,tissue_name):
         columns=[{"name": i, "id": i} for i in df.columns],
         data=query_df.to_dict("rows"),
     )],query_js
-
-server = app.server
 
 if __name__ == '__main__':
     app.run_server(debug=True)
