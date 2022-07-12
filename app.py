@@ -1,31 +1,67 @@
 # -*- coding: utf-8 -*-
-from dash import Dash, dcc, html, dash_table, Input, Output
+from dash import Dash, dcc, html, dash_table, Input, Output, State
 import dash_cytoscape as cyto
 import dash_bootstrap_components as dbc
 import pandas as pd
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
 df = pd.read_csv("data/network_all.csv").iloc[:,2:]
 
 # Specify the layout of the navigation bar at the top
-navbar = dbc.NavbarSimple(
-    children=[
-        dbc.NavItem(
-            dbc.NavLink(
-                "Systems Biology Group",
-                href="http://sb.cs.cmu.edu/",
-            )
+navbar = dbc.Navbar(
+            dbc.Container(
+                [
+                    
+                    html.A(
+                        dbc.Row(
+                            [
+                                dbc.Col(html.Img(src = "assets/hubnet_logo.png", height = "50px")),
+                                dbc.Col(dbc.NavbarBrand("HuBNet", className="ms-2"))
+                            ],
+                            align="center",
+                            className="g-0"
+                        ),
+                        href="#",
+                        style={"textDecoration":"none"},
+                    ),
+                    html.Span(
+                        [
+                            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+                            dbc.Collapse(
+                                [
+                                    dbc.NavItem(
+                                        dbc.NavLink("Systems Biology Group", href="http://sb.cs.cmu.edu/", style = {"color":"#adadad"}),
+                                    ),
+                                    dbc.NavItem(
+                                        dbc.NavLink("HuBMAP Project", href="https://portal.hubmapconsortium.org/", style = {"color":"#adadad"}),
+                                    )
+                                ],
+                                id="navbar-collapse",
+                                is_open = False,
+                                navbar = True,
+                            ),
+                        ],
+                        className = "ml-auto"
+                    )
+                ],
         ),
-        dbc.NavItem(
-            dbc.NavLink(
-                "HuBMAP Project",
-                href="https://portal.hubmapconsortium.org/",
-            )
-        ),
-    ],
-    brand="HuBNet",
-    brand_href="#",
+    #children=[
+    #    dbc.NavItem(
+    #        dbc.NavLink(
+    #            "Systems Biology Group",
+    #            href="http://sb.cs.cmu.edu/",
+    #        )
+    #    ),
+    #    dbc.NavItem(
+    #        dbc.NavLink(
+    #            "HuBMAP Project",
+    #            href="https://portal.hubmapconsortium.org/",
+    #        )
+    #    ),
+    #],
+    #
+    #brand="HuBNet",
+    #brand_href="#",
     color="dark",
     dark=True,
     fixed="top"
@@ -138,7 +174,7 @@ query = dbc.Container(
             """
             Systems Biology Group · School of Computer Science · Carnegie Mellon University  
             5000 Forbes Avenue · Pittsburgh, PA 15213  
-            © HuBNet v0.1  
+            © HuBNet v0.1; Created by Qi (Alex) Song
             """,
             style = {"marginTop":25,"marginLeft":25,"text-align":"center","color":"#949494"}
         )
@@ -201,6 +237,17 @@ app.layout = html.Div(
     style = {"background-color":"#f7f7f7"}
     )
 
+# add callback for toggling the collapse on small screens
+@app.callback(
+    Output("navbar-collapse", "is_open"),
+    [Input("navbar-toggler", "n_clicks")],
+    [State("navbar-collapse", "is_open")],
+)
+def toggle_navbar_collapse(n, is_open):
+    if n:
+        return not is_open
+    return is_open
+    
 # Generate different content for different tab page
 @app.callback(
     Output("tab-content","children"),
@@ -223,7 +270,7 @@ def generate_tab_content(active_tab):
                     """
                     Systems Biology Group · School of Computer Science · Carnegie Mellon University  
                     5000 Forbes Avenue · Pittsburgh, PA 15213  
-                    © HuBNet v0.1  
+                    © HuBNet v0.1; Created by Qi (Alex) Song 
                     """,
                     style = {"marginTop":25,"marginLeft":25,"text-align":"center","color":"#949494"}
                 )
@@ -236,7 +283,7 @@ def generate_tab_content(active_tab):
                 dbc.Button(
                     "Download",
                     className="me-1",
-                    href="data/network_all.csv",
+                    href="#data/network_all.csv",
                     style = {"background-color":"#f0f0f0", "border-color":"#d1d1d1","color":"#4d4d4d","font-weight":"bold","marginLeft":25}
                 ),
                 dcc.Markdown(
@@ -249,7 +296,7 @@ def generate_tab_content(active_tab):
                     """
                     Systems Biology Group · School of Computer Science · Carnegie Mellon University  
                     5000 Forbes Avenue · Pittsburgh, PA 15213  
-                    © HuBNet v0.1  
+                    © HuBNet v0.1; Created by Qi (Alex) Song  
                     """,
                     style = {"marginTop":25,"marginLeft":25,"text-align":"center","color":"#949494"}
                 )
@@ -270,7 +317,7 @@ def generate_tab_content(active_tab):
                     """
                     Systems Biology Group · School of Computer Science · Carnegie Mellon University  
                     5000 Forbes Avenue · Pittsburgh, PA 15213  
-                    © HuBNet v0.1  
+                    © HuBNet v0.1; Created by Qi (Alex) Song
                     """,
                     style = {"marginTop":25,"marginLeft":25,"text-align":"center","color":"#949494"}
                 )
