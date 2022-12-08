@@ -265,10 +265,13 @@ def generate_tab_content(active_tab):
     if active_tab == "download_tab":
         return dbc.Container(
             [
+                
                 dbc.Button(
                     "Download",
+                    id = "download-btn",
                     className="me-1",
-                    href="#data/network_all.csv",
+                    href="/static/network_all.csv",
+                    external_link = True,
                     style = {"background-color":"#f0f0f0", "border-color":"#d1d1d1","color":"#4d4d4d","font-weight":"bold","marginLeft":25}
                 ),
                 dcc.Markdown(
@@ -399,6 +402,6 @@ def generate_table(tf_names,target_names,tissue_name):
         columns=[{"name": i, "id": i} for i in df.columns],
         data=query_df.to_dict("rows"),
     )],query_js
-
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
